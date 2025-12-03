@@ -1,11 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:helloworld/authentication/auth_service.dart';
 import 'package:helloworld/pages/sign_in_page.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
   @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  @override
   Widget build(BuildContext context) {
+    final _emailController = TextEditingController();
+    final _passwordController = TextEditingController();
+    final _confirmpasswordController = TextEditingController();
+
+    void signUp() async {
+      final authService = AuthService();
+      final email = _emailController.text;
+      final password = _passwordController.text;
+      final confirmpass = _confirmpasswordController.text;
+
+      if (password != confirmpass) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Password don't match")));
+        return;
+      }
+      try {
+        await authService.signUpWithEmailAndPassword(email, password);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Registration Complete"),
+            backgroundColor: Color(0xff41a644),
+          ));
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Error $e")));
+        }
+      }
+    }
+
     return Scaffold(
       body: Stack(children: [
         Positioned.fill(
@@ -53,6 +90,7 @@ class SignUpPage extends StatelessWidget {
                         height: 20,
                       ),
                       TextField(
+                        controller: _emailController,
                         decoration: InputDecoration(
                             labelText: "Email",
                             border: OutlineInputBorder(
@@ -62,6 +100,8 @@ class SignUpPage extends StatelessWidget {
                         height: 20,
                       ),
                       TextField(
+                        obscureText: true,
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           labelText: "Password",
                           border: OutlineInputBorder(
@@ -72,6 +112,8 @@ class SignUpPage extends StatelessWidget {
                         height: 20,
                       ),
                       TextField(
+                        obscureText: true,
+                        controller: _confirmpasswordController,
                         decoration: InputDecoration(
                             labelText: "Confirm Password",
                             border: OutlineInputBorder(
@@ -81,7 +123,9 @@ class SignUpPage extends StatelessWidget {
                         height: 40,
                       ),
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            signUp();
+                          },
                           child: Text("Sign Up"),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.deepPurple,
