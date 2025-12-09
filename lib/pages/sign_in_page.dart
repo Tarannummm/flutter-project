@@ -1,10 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:helloworld/authentication/auth_service.dart';
+import 'package:helloworld/pages/profile_page.dart';
 
-class signinpage extends StatelessWidget {
+class signinpage extends StatefulWidget {
   const signinpage({Key? key}) : super(key: key);
 
   @override
+  State<signinpage> createState() => _signinpageState();
+}
+
+class _signinpageState extends State<signinpage> {
+  @override
   Widget build(BuildContext context) {
+    final _emailController = TextEditingController();
+    final _passwordController = TextEditingController();
+    final authServices = AuthService();
+    void signIn() async {
+      final email = _emailController.text;
+      final password = _passwordController.text;
+
+      try {
+        await authServices.signInWithEmailAndPassword(email, password);
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("Login Successful")));
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      }
+    }
+
     return Scaffold(
         body: Stack(children: [
       Positioned.fill(
@@ -56,6 +86,7 @@ class signinpage extends StatelessWidget {
                       height: 30,
                     ),
                     TextField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                           labelText: "Email",
                           border: OutlineInputBorder(
@@ -66,6 +97,7 @@ class signinpage extends StatelessWidget {
                       height: 25,
                     ),
                     TextField(
+                      controller: _passwordController,
                       decoration: InputDecoration(
                           labelText: "Password",
                           border: OutlineInputBorder(
@@ -77,7 +109,7 @@ class signinpage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        ;
+                        signIn();
                       },
                       child: Text("SIGN IN",
                           style: TextStyle(

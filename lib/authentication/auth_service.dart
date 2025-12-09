@@ -19,4 +19,10 @@ class AuthService {
   Future<void> signOut() async {
     return await _supabase.auth.signOut();
   }
+
+  String? getCurrentEmail() {
+    final session = _supabase.auth.currentSession;
+    final user = session!.user;
+    return user.email;
+  }
 }
