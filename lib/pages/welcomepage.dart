@@ -10,6 +10,10 @@ class welcomepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final height = size.height;
+    final width = size.width;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -22,7 +26,7 @@ class welcomepage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 200,
+                  height: height * 0.35,
                 ),
                 Text(
                   "Welcome Back",
@@ -33,7 +37,7 @@ class welcomepage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: height * 0.01,
                 ),
                 Text(
                   "Enter Your Details",
