@@ -1,6 +1,7 @@
 import 'dart:js';
 
 import 'package:flutter/material.dart';
+import 'package:helloworld/authentication/auth_gate.dart';
 import 'package:helloworld/main.dart';
 import 'package:helloworld/pages/sign_in_page.dart';
 import 'package:helloworld/pages/signup.dart';
@@ -52,7 +53,7 @@ class welcomepage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                        MaterialPageRoute(builder: (context) => AuthGate()));
                   },
                   child: Text("Next"),
                   style: ElevatedButton.styleFrom(
